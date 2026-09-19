@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jacob & Aylen | The Wedding</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        burgundy: {
+                            50: '#fdf2f4',
+                            100: '#fbe4e8',
+                            200: '#f7cad2',
+                            600: '#8c1d35',
+                            700: '#6b1d2f',
+                            800: '#4a0e17',
+                            900: '#2d060c',
+                        },
+                        gold: {
+                            300: '#f6e05e',
+                            400: '#ecc94b',
+                            500: '#d4af37',
+                            600: '#b89320',
+                            700: '#977516',
+                        },
+                        cream: '#FAF8F5',
+                        navy: '#0F172A',
+                    },
+                    fontFamily: {
+                        script: ['Great Vibes', 'cursive'],
+                        serif: ['Cormorant Garamond', 'serif'],
+                        display: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #2d060c;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d4af37;
+            border-radius: 4px;
+        }
+        
+        .gold-glow {
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.25);
+        }
+
+        .burgundy-glass {
+            background: rgba(45, 6, 12, 0.88);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .light-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* Sound equalizer bars */
+        .eq-bar {
+            width: 3px;
+            height: 100%;
+            background-color: #d4af37;
+            border-radius: 3px;
+            animation: eqWave 1.2s infinite ease-in-out alternate;
+        }
+        .eq-bar:nth-child(1) { animation-delay: 0.1s; }
+        .eq-bar:nth-child(2) { animation-delay: 0.4s; }
+        .eq-bar:nth-child(3) { animation-delay: 0.2s; }
+        .eq-bar:nth-child(4) { animation-delay: 0.5s; }
+
+        @keyframes eqWave {
+            0% { height: 20%; }
+            100% { height: 100%; }
+        }
+
+        .tab-btn.active {
+            color: #d4af37;
+            border-bottom: 2px solid #d4af37;
+        }
+    </style>
+</head>
+<body class="bg-cream text-slate-800 font-sans selection:bg-burgundy-800 selection:text-gold-300 relative overflow-x-hidden min-h-screen flex flex-col justify-between">
+
+    <canvas id="particleCanvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-40"></canvas>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 bg-burgundy-900/95 text-white backdrop-blur-md border-b border-gold-500/30 shadow-xl transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Couple Brand Logo -->
+                <button onclick="switchTab('home')" class="flex items-center gap-2 group text-left">
+                    <span class="font-script text-3xl sm:text-4xl text-gold-400 group-hover:text-gold-300 transition-colors">Jacob & Aylen</span>
+                    <i class="fa-solid fa-ring text-gold-500 text-xs sm:text-sm animate-pulse"></i>
+                </button>
+
+                <nav class="hidden lg:flex items-center space-x-6 text-xs font-semibold uppercase tracking-widest text-slate-200">
+                    <button onclick="switchTab('home')" id="nav-home" class="tab-btn active hover:text-gold-400 transition-colors py-2 px-1">Home</button>
+                    <button onclick="switchTab('schedule')" id="nav-schedule" class="tab-btn hover:text-gold-400 transition-colors py-2 px-1">Schedule</button>
+                    <button onclick="switchTab('rsvp')" id="nav-rsvp" class="tab-btn hover:text-gold-400 transition-colors py-2 px-1">RSVP</button>
+                    <button onclick="switchTab('people')" id="nav-people" class="tab-btn hover:text-gold-400 transition-colors py-2 px-1 flex items-center gap-1.5">
+                        <i class="fa-solid fa-users text-gold-500"></i> People
+                    </button>
+                    <button onclick="switchTab('registry')" id="nav-registry" class="tab-btn hover:text-gold-400 transition-colors py-2 px-1">Registry</button>
+                    <button onclick="switchTab('guestbook')" id="nav-guestbook" class="tab-btn hover:text-gold-400 transition-colors py-2 px-1">Guestbook</button>
+                </nav>
+
+                <!-- Header Actions -->
+                <div class="flex items-center gap-3">
+                    <button id="headerMusicBtn" onclick="toggleAudio()" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-burgundy-800 border border-gold-500/40 text-gold-300 hover:bg-burgundy-700 transition text-xs font-medium">
+                        <i id="headerMusicIcon" class="fa-solid fa-music text-gold-400"></i>
+                        <span id="headerMusicText" class="hidden sm:inline">A Shared Sigh</span>
+                    </button>
+                    
+                    <button onclick="switchTab('rsvp')" class="px-5 py-2.5 rounded-full bg-gold-500 hover:bg-gold-400 text-burgundy-900 font-bold text-xs tracking-wider uppercase transition shadow-md hover:shadow-gold-500/20">
+                        RSVP
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileMenu()" class="lg:hidden p-2 text-gold-400 hover:text-white" aria-label="Toggle Menu">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobileMenu" class="hidden lg:hidden bg-burgundy-900 border-b border-gold-500/30 px-4 pt-2 pb-6 space-y-3 text-center text-sm uppercase tracking-wider font-semibold">
+            <button onclick="switchTab('home'); toggleMobileMenu()" class="block w-full py-2.5 text-slate-200 hover:text-gold-400 border-b border-burgundy-800">Home</button>
+            <button onclick="switchTab('schedule'); toggleMobileMenu()" class="block w-full py-2.5 text-slate-200 hover:text-gold-400 border-b border-burgundy-800">Schedule</button>
+            <button onclick="switchTab('rsvp'); toggleMobileMenu()" class="block w-full py-2.5 text-slate-200 hover:text-gold-400 border-b border-burgundy-800">RSVP</button>
+            <button onclick="switchTab('people'); toggleMobileMenu()" class="block w-full py-2.5 text-gold-400 hover:text-gold-300 border-b border-burgundy-800 font-bold flex items-center justify-center gap-2">
+                <i class="fa-solid fa-users"></i> People (Guest Roster)
+            </button>
+            <button onclick="switchTab('registry'); toggleMobileMenu()" class="block w-full py-2.5 text-slate-200 hover:text-gold-400 border-b border-burgundy-800">Registry</button>
+            <button onclick="switchTab('guestbook'); toggleMobileMenu()" class="block w-full py-2.5 text-slate-200 hover:text-gold-400">Guestbook</button>
+        </div>
+    </header>
+
+    <audio id="bg-music" src="A_Shared_Sigh.mp3" preload="auto" loop></audio>
+
+    <main class="flex-grow z-10">
+
+        <!-- ================= PAGE 1: HOME ================= -->
+        <section id="tab-home" class="page-tab block">
+            <div class="relative min-h-[85vh] flex items-center justify-center pt-10 pb-16 px-4 bg-gradient-to-b from-burgundy-900 via-burgundy-800 to-cream text-white overflow-hidden">
+                <div class="max-w-4xl mx-auto text-center z-10 space-y-8">
+                    
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold-500/20 border border-gold-500/40 text-gold-300 text-xs font-bold tracking-widest uppercase animate-pulse">
+                        <i class="fa-solid fa-heart text-gold-400"></i> Save The Date
+                    </div>
+
+                    <div class="space-y-4">
+                        <h1 class="font-script text-6xl sm:text-8xl md:text-9xl text-gold-300 leading-none drop-shadow-lg">
+                            Jacob & Aylen
+                        </h1>
+                        <p class="font-serif italic text-xl sm:text-2xl text-slate-200 max-w-2xl mx-auto font-light leading-relaxed">
+                            "From the bleachers to the altar... We're officially a team!"
+                        </p>
+                    </div>
+
+                    <div class="py-5 px-6 sm:px-10 burgundy-glass rounded-2xl shadow-2xl inline-block gold-glow">
+                        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-gold-300 font-serif">
+                            <div class="flex items-center gap-2 text-lg sm:text-xl font-semibold">
+                                <i class="fa-regular fa-calendar-days text-gold-400"></i>
+                                <span>September 28, 2026</span>
+                            </div>
+                            <span class="hidden sm:inline text-gold-500/60">•</span>
+                            <div class="flex items-center gap-2 text-lg sm:text-xl font-semibold">
+                                <i class="fa-regular fa-clock text-gold-400"></i>
+                                <span>12:00 AM (Midnight Kickoff)</span>
+                            </div>
+                            <span class="hidden sm:inline text-gold-500/60">•</span>
+                            <div class="flex items-center gap-2 text-lg sm:text-xl font-semibold">
+                                <i class="fa-solid fa-school text-gold-400"></i>
+                                <span>AC Reynolds Middle School</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
+                        <p class="text-xs font-semibold tracking-widest uppercase text-gold-400 mb-4">Countdown to Midnight Vows</p>
+                        <div class="grid grid-cols-4 gap-3 sm:gap-6 max-w-md mx-auto">
+                            <div class="burgundy-glass p-3 sm:p-4 rounded-xl shadow-lg flex flex-col items-center">
+                                <span id="cd-days" class="font-serif text-2xl sm:text-4xl font-bold text-gold-300">00</span>
+                                <span class="text-[10px] sm:text-xs text-slate-300 uppercase tracking-wider font-medium">Days</span>
+                            </div>
+                            <div class="burgundy-glass p-3 sm:p-4 rounded-xl shadow-lg flex flex-col items-center">
+                                <span id="cd-hours" class="font-serif text-2xl sm:text-4xl font-bold text-gold-300">00</span>
+                                <span class="text-[10px] sm:text-xs text-slate-300 uppercase tracking-wider font-medium">Hours</span>
+                            </div>
+                            <div class="burgundy-glass p-3 sm:p-4 rounded-xl shadow-lg flex flex-col items-center">
+                                <span id="cd-minutes" class="font-serif text-2xl sm:text-4xl font-bold text-gold-300">00</span>
+                                <span class="text-[10px] sm:text-xs text-slate-300 uppercase tracking-wider font-medium">Mins</span>
+                            </div>
+                            <div class="burgundy-glass p-3 sm:p-4 rounded-xl shadow-lg flex flex-col items-center">
+                                <span id="cd-seconds" class="font-serif text-2xl sm:text-4xl font-bold text-gold-300">00</span>
+                                <span class="text-[10px] sm:text-xs text-slate-300 uppercase tracking-wider font-medium">Secs</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-6 flex flex-wrap justify-center gap-4">
+                        <button onclick="switchTab('rsvp')" class="px-8 py-3.5 rounded-full bg-gold-500 text-burgundy-900 font-bold text-sm tracking-widest uppercase hover:bg-gold-400 transition shadow-lg hover:shadow-gold-500/30 hover:-translate-y-0.5">
+                            RSVP Now
+                        </button>
+                        <button onclick="switchTab('people')" class="px-6 py-3.5 rounded-full bg-burgundy-800 text-gold-300 border border-gold-500/50 font-semibold text-sm tracking-widest uppercase hover:bg-burgundy-700 transition shadow-md flex items-center gap-2">
+                            <i class="fa-solid fa-users"></i> View Guest Roster
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <section class="py-20 px-4 max-w-5xl mx-auto">
+                <div class="text-center mb-16 space-y-3">
+                    <span class="text-xs font-bold tracking-widest uppercase text-gold-600">The Playbook of Love</span>
+                    <h2 class="font-serif text-4xl sm:text-5xl font-bold text-burgundy-900">How It All Started</h2>
+                    <div class="w-16 h-1 bg-gold-500 mx-auto rounded-full"></div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="relative">
+                        <div class="absolute -inset-2 bg-gradient-to-r from-gold-400 to-burgundy-600 rounded-3xl blur opacity-30"></div>
+                        <div class="relative bg-white p-6 rounded-2xl shadow-xl border border-gold-300/40 text-center space-y-4">
+                            <div class="w-full h-72 bg-gradient-to-tr from-burgundy-900 via-burgundy-700 to-slate-900 rounded-xl flex flex-col items-center justify-center p-6 text-white relative overflow-hidden group">
+                                <i class="fa-solid fa-football text-6xl text-gold-400 mb-3 animate-float"></i>
+                                <span class="font-script text-4xl text-gold-300">AC Reynolds Middle School</span>
+                                <p class="text-xs text-slate-300 mt-2 italic">Where footballs, bleachers, and destiny met.</p>
+                                
+                                <div class="absolute top-4 right-4 bg-white/20 backdrop-blur px-3 py-1 rounded-full text-xs font-bold">
+                                    Established 2021
+                                </div>
+                            </div>
+                            <blockquote class="font-serif italic text-slate-700 text-lg">
+                                "He was sitting on the bleachers holding a football... I walked right up and told him he held the ball all wrong!"
+                            </blockquote>
+                            <p class="text-xs font-semibold text-gold-600 uppercase tracking-widest">— Aylen</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-8 relative before:absolute before:inset-0 before:left-3 before:w-0.5 before:bg-gold-300">
+                        <div class="relative pl-10">
+                            <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-burgundy-800 border-4 border-cream flex items-center justify-center text-white text-[10px]">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <span class="text-xs font-bold text-gold-600 uppercase tracking-wider">Chapter 1 • Bleacher Days</span>
+                            <h3 class="font-serif text-2xl font-bold text-slate-900">The Bleacher Meeting</h3>
+                            <p class="text-slate-600 mt-1 leading-relaxed text-sm">
+                                It all started at AC Reynolds Middle School. Jacob was sitting on the bleachers gripping a football, when Aylen walked up with friendly banter that turned into hours of talking.
+                            </p>
+                        </div>
+
+                        <div class="relative pl-10">
+                            <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-burgundy-800 border-4 border-cream flex items-center justify-center text-white text-[10px]">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <span class="text-xs font-bold text-gold-600 uppercase tracking-wider">Chapter 2 • Teammates</span>
+                            <h3 class="font-serif text-2xl font-bold text-slate-900">Official Teammates</h3>
+                            <p class="text-slate-600 mt-1 leading-relaxed text-sm">
+                                After countless shared lunches and cheering at school games, Jacob asked Aylen to be his girlfriend right on the 50-yard line.
+                            </p>
+                        </div>
+
+                        <div class="relative pl-10">
+                            <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-gold-500 border-4 border-cream flex items-center justify-center text-white text-[10px]">
+                                <i class="fa-solid fa-ring"></i>
+                            </div>
+                            <span class="text-xs font-bold text-gold-600 uppercase tracking-wider">Chapter 3 • The Proposal</span>
+                            <h3 class="font-serif text-2xl font-bold text-slate-900">The Championship Ring</h3>
+                            <p class="text-slate-600 mt-1 leading-relaxed text-sm">
+                                Jacob popped the question with a ring hidden inside a custom leather football. She said YES instantly!
+                            </p>
+                        </div>
+
+                        <div class="relative pl-10">
+                            <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-burgundy-900 border-4 border-cream flex items-center justify-center text-white text-[10px]">
+                                <i class="fa-solid fa-trophy"></i>
+                            </div>
+                            <span class="text-xs font-bold text-gold-600 uppercase tracking-wider">Chapter 4 • Sept 28, 2026 @ 12:00 AM</span>
+                            <h3 class="font-serif text-2xl font-bold text-slate-900">Midnight Kickoff!</h3>
+                            <p class="text-slate-600 mt-1 leading-relaxed text-sm">
+                                We're tying the knot at midnight back where it all started! Join us as we start our lifetime team.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- ================= PAGE 2: SCHEDULE ================= -->
+        <section id="tab-schedule" class="page-tab hidden py-16 px-4 max-w-6xl mx-auto">
+            <div class="text-center mb-12 space-y-3">
+                <span class="text-xs font-bold tracking-widest uppercase text-gold-600">Event Details</span>
+                <h2 class="font-serif text-4xl sm:text-5xl font-bold text-burgundy-900">Wedding Day Schedule</h2>
+                <p class="text-slate-600 font-serif italic text-lg">Midnight Kickoff • Monday, September 28, 2026</p>
+                <div class="w-16 h-1 bg-gold-500 mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-2xl p-8 border border-gold-300/40 shadow-lg hover:shadow-xl transition flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-burgundy-800 text-gold-300 flex items-center justify-center text-2xl mb-6 shadow">
+                            <i class="fa-solid fa-church"></i>
+                        </div>
+                        <span class="text-xs font-bold text-burgundy-700 uppercase tracking-wider">12:00 AM Midnight</span>
+                        <h3 class="font-serif text-2xl font-bold text-slate-900 mt-1 mb-3">Midnight Vows</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                            Exchange of wedding vows inside the AC Reynolds Middle School Auditorium Gym under starry ambient lights.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-gold-200 text-xs font-semibold text-slate-500 flex items-center gap-2">
+                        <i class="fa-solid fa-location-dot text-gold-600"></i> Main Auditorium Gym
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8 border border-gold-300/40 shadow-lg hover:shadow-xl transition flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-gold-500 text-burgundy-900 flex items-center justify-center text-2xl mb-6 shadow">
+                            <i class="fa-solid fa-utensils"></i>
+                        </div>
+                        <span class="text-xs font-bold text-burgundy-700 uppercase tracking-wider">1:00 AM Late Night</span>
+                        <h3 class="font-serif text-2xl font-bold text-slate-900 mt-1 mb-3">Celebration Feast</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                            Gourmet artisan pizza, sliders, late night cafeteria snacks, toasts, and wedding cake cutting.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-gold-200 text-xs font-semibold text-slate-500 flex items-center gap-2">
+                        <i class="fa-solid fa-location-dot text-gold-600"></i> Grand Dining Hall
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8 border border-gold-300/40 shadow-lg hover:shadow-xl transition flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-burgundy-900 text-gold-300 flex items-center justify-center text-2xl mb-6 shadow">
+                            <i class="fa-solid fa-compact-disc"></i>
+                        </div>
+                        <span class="text-xs font-bold text-burgundy-700 uppercase tracking-wider">2:00 AM - 4:00 AM</span>
+                        <h3 class="font-serif text-2xl font-bold text-slate-900 mt-1 mb-3">Halftime Dance Party</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                            Live DJ playing guest song requests, photo booth sessions, and a warm sparkler exit!
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-gold-200 text-xs font-semibold text-slate-500 flex items-center gap-2">
+                        <i class="fa-solid fa-location-dot text-gold-600"></i> Courtyard & Field
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 bg-gradient-to-r from-burgundy-900 via-burgundy-800 to-slate-900 rounded-3xl p-8 sm:p-12 text-white shadow-2xl border border-gold-500/30">
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="space-y-4">
+                        <span class="px-3 py-1 bg-gold-500/20 text-gold-300 border border-gold-500/40 rounded-full text-xs font-bold uppercase tracking-widest">
+                            Venue Location
+                        </span>
+                        <h3 class="font-serif text-3xl sm:text-4xl font-bold text-gold-300">AC Reynolds Middle School</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            222 Fairway Dr, Asheville, NC 28803<br>
+                            <span class="text-gold-400 font-medium">Dress Code:</span> Elegant Midnight Formal / Elevated Chic
+                        </p>
+                        <div class="pt-2">
+                            <a href="https://maps.google.com/?q=AC+Reynolds+Middle+School+Asheville+NC" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gold-500 text-burgundy-900 font-bold text-xs uppercase tracking-wider hover:bg-gold-400 transition">
+                                <i class="fa-solid fa-map-location-dot"></i> Get Directions
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white/10 backdrop-blur border border-white/20 p-6 rounded-2xl space-y-3">
+                        <h4 class="font-serif text-xl font-bold text-gold-300 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-info"></i> Guest Guidelines
+                        </h4>
+                        <ul class="text-xs text-slate-200 space-y-2.5">
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-parking text-gold-400 mt-0.5"></i>
+                                <span>Free parking available in the main athletic lot near the gymnasium entrance.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-shirt text-gold-400 mt-0.5"></i>
+                                <span>Team colors (Deep Burgundy & Warm Gold) strongly encouraged!</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-users text-gold-400 mt-0.5"></i>
+                                <span>Check out who else is attending on our public <button onclick="switchTab('people')" class="text-gold-300 underline font-semibold">People tab</button>!</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 3: RSVP (STRICTLY NO EMAIL FIELD) ================= -->
+        <section id="tab-rsvp" class="page-tab hidden py-16 px-4 max-w-4xl mx-auto">
+            <div class="bg-white rounded-3xl p-8 sm:p-12 shadow-2xl border border-gold-300/50 relative overflow-hidden">
+                
+                <div class="text-center mb-10 space-y-3">
+                    <span class="text-xs font-bold tracking-widest uppercase text-gold-600">Join Our Roster</span>
+                    <h2 class="font-serif text-4xl sm:text-5xl font-bold text-burgundy-900">RSVP For The Big Game</h2>
+                    <p class="text-slate-600 text-sm">Please respond on or before September 1st, 2026</p>
+                    <div class="w-16 h-1 bg-gold-500 mx-auto rounded-full"></div>
+                </div>
+
+                <!-- RSVP Form without Email -->
+                <form id="rsvpForm" onsubmit="handleRSVPSubmit(event)" class="space-y-6">
+                    
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Full Name *</label>
+                        <input type="text" id="rsvpName" required placeholder="e.g. Coach Dave, Marcus Vance, or Aunt Sarah" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-burgundy-700 focus:border-transparent outline-none transition text-sm">
+                    </div>
+
+                    <!-- Attendance Radio Buttons -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Will You Be Attending? *</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="attendance" value="Yes" checked class="peer sr-only">
+                                <div class="p-3.5 text-center rounded-xl border border-slate-200 peer-checked:border-burgundy-700 peer-checked:bg-burgundy-50 peer-checked:text-burgundy-800 font-semibold text-sm transition flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-green-600"></i> Joyfully Accept
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="attendance" value="Maybe" class="peer sr-only">
+                                <div class="p-3.5 text-center rounded-xl border border-slate-200 peer-checked:border-burgundy-700 peer-checked:bg-burgundy-50 peer-checked:text-burgundy-800 font-semibold text-sm transition flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-circle-question text-amber-500"></i> On Bench (Maybe)
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="attendance" value="No" class="peer sr-only">
+                                <div class="p-3.5 text-center rounded-xl border border-slate-200 peer-checked:border-burgundy-700 peer-checked:bg-burgundy-50 peer-checked:text-burgundy-800 font-semibold text-sm transition flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-circle-xmark text-red-500"></i> Regretfully Decline
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="grid sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Total Party Size / Guest Count</label>
+                            <select id="rsvpPartySize" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-burgundy-700 outline-none transition text-sm">
+                                <option value="1">1 Person (Just Me)</option>
+                                <option value="2">2 People (+1)</option>
+                                <option value="3">3 People (Family)</option>
+                                <option value="4">4 People (Full Group)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Plus One Name (Optional)</label>
+                            <input type="text" id="rsvpPlusOne" placeholder="Guest Name" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-burgundy-700 outline-none transition text-sm">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Song Request for DJ</label>
+                        <input type="text" id="rsvpSong" placeholder="What track gets you on the dance floor?" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-burgundy-700 outline-none transition text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Personal Message to Jacob & Aylen</label>
+                        <textarea id="rsvpMessage" rows="3" placeholder="Share a sweet memory, advice, or warm wish..." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-burgundy-700 outline-none transition text-sm"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 rounded-xl bg-burgundy-800 hover:bg-burgundy-900 text-white font-bold text-sm tracking-widest uppercase shadow-lg transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i> Submit RSVP & Join Public Roster
+                    </button>
+
+                </form>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 4: PEOPLE (PUBLIC GUEST ROSTER) ================= -->
+        <section id="tab-people" class="page-tab hidden py-16 px-4 max-w-6xl mx-auto">
+            
+            <div class="text-center mb-10 space-y-3">
+                <span class="text-xs font-bold tracking-widest uppercase text-gold-600">Public Roster</span>
+                <h2 class="font-serif text-4xl sm:text-5xl font-bold text-burgundy-900">Guest List & Sign-Ups</h2>
+                <p class="text-slate-600 text-sm max-w-xl mx-auto">
+                    Everyone who has signed up or responded to Jacob & Aylen's wedding invitation!
+                </p>
+                <div class="w-16 h-1 bg-gold-500 mx-auto rounded-full"></div>
+            </div>
+
+            <!-- Roster Statistics Summary Cards -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <div class="bg-white p-5 rounded-2xl shadow border border-gold-300/40 text-center">
+                    <span id="stat-total" class="font-serif text-3xl font-bold text-burgundy-800 block">0</span>
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Total RSVPs</span>
+                </div>
+                <div class="bg-white p-5 rounded-2xl shadow border border-gold-300/40 text-center">
+                    <span id="stat-attending" class="font-serif text-3xl font-bold text-green-700 block">0</span>
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Confirmed Attending</span>
+                </div>
+                <div class="bg-white p-5 rounded-2xl shadow border border-gold-300/40 text-center">
+                    <span id="stat-party" class="font-serif text-3xl font-bold text-gold-600 block">0</span>
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Total Guest Count</span>
+                </div>
+                <div class="bg-white p-5 rounded-2xl shadow border border-gold-300/40 text-center">
+                    <span id="stat-songs" class="font-serif text-3xl font-bold text-burgundy-600 block">0</span>
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Song Requests</span>
+                </div>
+            </div>
+
+            <!-- Search & Filter Controls -->
+            <div class="bg-white p-4 rounded-2xl shadow-md border border-gold-200 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="relative w-full sm:w-80">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+                    <input type="text" id="peopleSearchInput" oninput="filterPeopleList()" placeholder="Search guest name or song..." class="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-burgundy-700">
+                </div>
+
+                <!-- Filter Pills -->
+                <div class="flex items-center gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
+                    <button onclick="setPeopleFilter('all')" id="filter-all" class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-burgundy-800 text-gold-300">All Guests</button>
+                    <button onclick="setPeopleFilter('Yes')" id="filter-Yes" class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">Attending</button>
+                    <button onclick="setPeopleFilter('Maybe')" id="filter-Maybe" class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">On Bench</button>
+                    <button onclick="setPeopleFilter('No')" id="filter-No" class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">Declined</button>
+                </div>
+            </div>
+
+            <!-- Guests Roster Cards Grid -->
+            <div id="peopleCardsGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamically Rendered JS -->
+            </div>
+
+            <div class="mt-12 text-center">
+                <button onclick="switchTab('rsvp')" class="px-6 py-3 rounded-full bg-gold-500 text-burgundy-900 font-bold text-xs uppercase tracking-wider shadow hover:bg-gold-400 transition inline-flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Sign Up / Add Your RSVP
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 5: REGISTRY ================= -->
+        <section id="tab-registry" class="page-tab hidden py-16 px-4 max-w-6xl mx-auto">
+            <div class="text-center mb-16 space-y-3">
+                <span class="text-xs font-bold tracking-widest uppercase text-gold-600">Support The Team</span>
+                <h2 class="font-serif text-4xl sm:text-5xl font-bold text-burgundy-900">Wedding Registry</h2>
+                <p class="text-slate-600 text-sm">Help Jacob & Aylen kick off their new life together!</p>
+                <div class="w-16 h-1 bg-gold-500 mx-auto rounded-full"></div>
+            </div>
+
+            <div id="registryGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- ================= PAGE 6: GUESTBOOK ================= -->
+        <section id="tab-guestbook" class="page-tab hidden py-16 px-4 max-w-5xl mx-auto">
+            <div class="text-center mb-12 space-y-3">
+                <span class="text-xs font-bold tracking-widest uppercase text-gold-600">Fan Locker Room</span>
+                <h2 class="font-serif text-4xl sm:text-5xl font-bold text-burgundy-900">Guestbook & Well Wishes</h2>
+                <p class="text-slate-600 text-sm">Leave a message, piece of advice, or cheer for Jacob & Aylen!</p>
+                <div class="w-16 h-1 bg-gold-500 mx-auto rounded-full"></div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-md border border-gold-300/40 mb-10">
+                <h3 class="font-serif text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-pen-nib text-burgundy-700"></i> Post a Public Message
+                </h3>
+                <form id="guestbookForm" onsubmit="handleGuestbookSubmit(event)" class="space-y-4">
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <input type="text" id="gbName" required placeholder="Your Name" class="px-4 py-2.5 rounded-lg border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-burgundy-700">
+                        <input type="text" id="gbRelation" placeholder="Relationship (e.g. Bridesmaid, Teammate)" class="px-4 py-2.5 rounded-lg border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-burgundy-700">
+                    </div>
+                    <textarea id="gbMessage" required rows="3" placeholder="Write your wish or advice..." class="w-full px-4 py-2.5 rounded-lg border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-burgundy-700"></textarea>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-gold-500 hover:bg-gold-600 text-burgundy-900 font-bold text-xs uppercase tracking-wider transition shadow">
+                        Post Message
+                    </button>
+                </form>
+            </div>
+
+            <div id="guestbookFeed" class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+                <!-- Dynamically populated via JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-burgundy-900 text-white py-12 px-4 border-t border-gold-500/30 z-10">
+        <div class="max-w-4xl mx-auto text-center space-y-6">
+            <h3 class="font-script text-5xl text-gold-400">Jacob & Aylen</h3>
+            <p class="font-serif italic text-slate-300 text-sm max-w-xl mx-auto">
+                "From the bleachers to the altar... We're officially a team!"
+            </p>
+            <p class="text-xs text-slate-400">
+                September 28, 2026 @ 12:00 AM • AC Reynolds Middle School Auditorium Gym
+            </p>
+            <div class="pt-2 text-[11px] text-gold-400 uppercase tracking-widest font-semibold">
+                Jacob & Aylen Wedding Celebration
+            </div>
+        </div>
+    </footer>
+
+    <div id="audioPlayerWidget" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:w-96 z-50 burgundy-glass text-white p-4 rounded-2xl shadow-2xl gold-glow transition-all transform duration-300">
+        <div class="flex items-center gap-4">
+            <button onclick="toggleAudio()" class="w-12 h-12 rounded-full bg-gold-500 text-burgundy-900 flex items-center justify-center text-lg font-bold shadow-lg hover:scale-105 transition shrink-0">
+                <i id="widgetPlayIcon" class="fa-solid fa-play"></i>
+            </button>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-gold-400 truncate">Official Soundtrack</span>
+                    <!-- Equalizer Visualizer -->
+                    <div id="soundWave" class="hidden flex items-center gap-1 h-3">
+                        <div class="eq-bar"></div>
+                        <div class="eq-bar"></div>
+                        <div class="eq-bar"></div>
+                        <div class="eq-bar"></div>
+                    </div>
+                </div>
+                <p class="text-sm font-serif font-semibold text-gold-300 truncate">A Shared Sigh</p>
+                <p id="audioStatusText" class="text-[10px] text-slate-300 truncate">Click play to listen</p>
+            </div>
+        </div>
+        
+        <!-- Controls & File Input Fallback -->
+        <div class="mt-3 pt-2 border-t border-gold-500/20 space-y-2">
+            <div class="flex items-center gap-2 text-xs text-gold-400">
+                <i class="fa-solid fa-volume-low text-[10px]"></i>
+                <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="0.7" oninput="changeVolume(this.value)" class="w-full h-1 bg-burgundy-700 rounded-lg appearance-none cursor-pointer accent-gold-500">
+                <i class="fa-solid fa-volume-high text-[10px]"></i>
+            </div>
+
+            <!-- Local MP3 File Picker Option -->
+            <div class="flex items-center justify-between text-[11px] pt-1">
+                <label for="localMp3Input" class="cursor-pointer text-gold-400 hover:text-gold-300 flex items-center gap-1.5 underline font-medium">
+                    <i class="fa-solid fa-folder-open text-xs"></i> Choose local "A Shared Sigh.mp3"
+                </label>
+                <input type="file" id="localMp3Input" accept="audio/*" class="hidden" onchange="handleLocalAudioFile(event)">
+                <span id="fileLoadedBadge" class="hidden text-green-400 text-[10px] font-semibold"><i class="fa-solid fa-check"></i> Loaded</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="rsvpModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full text-center space-y-6 border border-gold-400 shadow-2xl animate-float">
+            <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto text-3xl">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h3 class="font-serif text-3xl font-bold text-burgundy-900">You're On The Roster!</h3>
+            <p id="rsvpModalText" class="text-sm text-slate-600 leading-relaxed">
+                Thank you for signing up for Jacob & Aylen's wedding day on September 28, 2026 at 12:00 AM! Your response has been added to the public guest roster.
+            </p>
+            <div class="space-y-3 pt-2">
+                <button onclick="closeRSVPModalAndShowPeople()" class="w-full py-3 rounded-xl bg-gold-500 text-burgundy-900 font-bold text-xs uppercase tracking-widest hover:bg-gold-400 transition shadow">
+                    <i class="fa-solid fa-users mr-1"></i> View Yourself On People List
+                </button>
+                <button onclick="closeRSVPModal()" class="w-full py-2.5 text-xs text-slate-500 hover:text-slate-800 font-semibold uppercase">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="registryModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full space-y-6 border border-gold-400 shadow-2xl">
+            <div class="text-center space-y-2">
+                <i class="fa-solid fa-gift text-4xl text-gold-500"></i>
+                <h3 id="regModalTitle" class="font-serif text-2xl font-bold text-burgundy-900">Contribute to Registry</h3>
+                <p class="text-xs text-slate-500">Every gift helps build Jacob & Aylen's future together!</p>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Select Amount</label>
+                    <div class="grid grid-cols-4 gap-2">
+                        <button onclick="selectGiftAmount(25)" class="amt-btn py-2 rounded-lg border border-slate-200 text-xs font-bold hover:bg-gold-50">$25</button>
+                        <button onclick="selectGiftAmount(50)" class="amt-btn py-2 rounded-lg border border-slate-200 text-xs font-bold hover:bg-gold-50">$50</button>
+                        <button onclick="selectGiftAmount(100)" class="amt-btn py-2 rounded-lg border border-slate-200 text-xs font-bold hover:bg-gold-50">$100</button>
+                        <button onclick="selectGiftAmount(200)" class="amt-btn py-2 rounded-lg border border-slate-200 text-xs font-bold hover:bg-gold-50">$200</button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Your Name</label>
+                    <input type="text" id="regGiverName" placeholder="e.g. Aunt Sarah" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-burgundy-700">
+                </div>
+
+                <button onclick="confirmGiftContribution()" class="w-full py-3 rounded-xl bg-burgundy-800 text-white font-bold text-xs uppercase tracking-widest hover:bg-burgundy-900 transition">
+                    Gift This Item
+                </button>
+                
+                <button onclick="closeRegistryModal()" class="w-full py-2 text-xs text-slate-400 hover:text-slate-600 uppercase font-semibold">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ----------------------------------------------------
+         * 1. SPA Navigation Engine
+         * ---------------------------------------------------- */
+        function switchTab(tabName) {
+            document.querySelectorAll('.page-tab').forEach(sec => {
+                sec.classList.add('hidden');
+                sec.classList.remove('block');
+            });
+
+            const targetSection = document.getElementById('tab-' + tabName);
+            if (targetSection) {
+                targetSection.classList.remove('hidden');
+                targetSection.classList.add('block');
+            }
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            const activeNavBtn = document.getElementById('nav-' + tabName);
+            if (activeNavBtn) {
+                activeNavBtn.classList.add('active');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (tabName === 'people') {
+                renderPeopleList();
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        /* ----------------------------------------------------
+         * 2. Particle Canvas Background
+         * ---------------------------------------------------- */
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3.5 + 1;
+                this.speedY = -Math.random() * 0.7 - 0.2;
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.opacity = Math.random() * 0.5 + 0.2;
+                this.color = Math.random() > 0.5 ? '#d4af37' : '#8c1d35';
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                if (this.y < -10) {
+                    this.y = canvas.height + 10;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 45; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        /* ----------------------------------------------------
+         * 3. Live Countdown Timer (Target: Sept 28, 2026 12:00 AM)
+         * ---------------------------------------------------- */
+        const targetDate = new Date('September 28, 2026 00:00:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                document.getElementById('cd-days').innerText = "00";
+                document.getElementById('cd-hours').innerText = "00";
+                document.getElementById('cd-minutes').innerText = "00";
+                document.getElementById('cd-seconds').innerText = "00";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('cd-days').innerText = days < 10 ? '0' + days : days;
+            document.getElementById('cd-hours').innerText = hours < 10 ? '0' + hours : hours;
+            document.getElementById('cd-minutes').innerText = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById('cd-seconds').innerText = seconds < 10 ? '0' + seconds : seconds;
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        /* ----------------------------------------------------
+         * 4. Soundtrack Audio Player ("A Shared Sigh")
+         * ---------------------------------------------------- */
+        const audio = document.getElementById('bg-music');
+        let isPlaying = false;
+        let synthInterval = null;
+        let audioCtx = null;
+        let noteIdx = 0;
+
+        const sighMelody = [
+            { note: 293.66, dur: 0.8 }, { note: 369.99, dur: 0.8 },
+            { note: 440.00, dur: 0.8 }, { note: 587.33, dur: 1.4 },
+            { note: 554.37, dur: 0.8 }, { note: 440.00, dur: 0.8 },
+            { note: 493.88, dur: 0.8 }, { note: 369.99, dur: 0.8 },
+            { note: 440.00, dur: 1.4 }, { note: 329.63, dur: 0.8 }
+        ];
+
+        function playSynthNote(freq, duration) {
+            if (!audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+
+                const now = audioCtx.currentTime;
+                gain.gain.setValueAtTime(0, now);
+                gain.gain.linearRampToValueAtTime(0.18, now + 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start(now);
+                osc.stop(now + duration);
+            } catch(e) {}
+        }
+
+        function toggleAudio() {
+            if (!isPlaying) {
+                const playPromise = audio.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        setAudioPlayingState(true, "Playing 'A Shared Sigh'");
+                    }).catch(() => {
+                        if (!audioCtx) {
+                            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                        }
+                        if (audioCtx.state === 'suspended') {
+                            audioCtx.resume();
+                        }
+                        
+                        setAudioPlayingState(true, "Playing 'A Shared Sigh' (Theme)");
+                        synthInterval = setInterval(() => {
+                            const cur = sighMelody[noteIdx];
+                            playSynthNote(cur.note, cur.dur);
+                            noteIdx = (noteIdx + 1) % sighMelody.length;
+                        }, 700);
+                    });
+                }
+            } else {
+                audio.pause();
+                if (synthInterval) clearInterval(synthInterval);
+                setAudioPlayingState(false, "Audio paused");
+            }
+        }
+
+        function handleLocalAudioFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const objectUrl = URL.createObjectURL(file);
+                audio.src = objectUrl;
+                document.getElementById('fileLoadedBadge').classList.remove('hidden');
+                document.getElementById('audioStatusText').innerText = "Loaded local file: " + file.name;
+                audio.play().then(() => {
+                    setAudioPlayingState(true, "Playing: " + file.name);
+                });
+            }
+        }
+
+        function setAudioPlayingState(playing, statusMessage) {
+            isPlaying = playing;
+            document.getElementById('widgetPlayIcon').className = playing ? "fa-solid fa-pause" : "fa-solid fa-play";
+            document.getElementById('headerMusicIcon').className = playing ? "fa-solid fa-volume-high text-gold-400" : "fa-solid fa-music text-gold-400";
+            document.getElementById('headerMusicText').innerText = playing ? "Pause Music" : "A Shared Sigh";
+            
+            const wave = document.getElementById('soundWave');
+            if (playing) wave.classList.remove('hidden'); else wave.classList.add('hidden');
+            
+            document.getElementById('audioStatusText').innerText = statusMessage;
+        }
+
+        function changeVolume(val) {
+            audio.volume = val;
+        }
+
+        /* ----------------------------------------------------
+         * 5. People / Public Guest Roster Management
+         * ---------------------------------------------------- */
+        const initialGuests = [
+            { id: 1, name: "Coach Dave", attendance: "Yes", party: 2, plusOne: "Mrs. Dave", song: "Eye of the Tiger - Survivor", message: "So proud of you two! From middle school gym class to forever!" },
+            { id: 2, name: "Sarah & Marcus", attendance: "Yes", party: 2, plusOne: "Marcus Vance", song: "Perfect - Ed Sheeran", message: "Can't wait for the midnight vows and pizza feast!" },
+            { id: 3, name: "Tyler Brooks", attendance: "Yes", party: 1, plusOne: "", song: "All of Me - John Legend", message: "Jacob, don't drop the football at the altar man!" },
+            { id: 4, name: "Coach Miller", attendance: "Maybe", party: 1, plusOne: "", song: "Don't Stop Believin'", message: "Will try my best to make midnight kickoff!" },
+            { id: 5, name: "Jessica Taylor", attendance: "No", party: 1, plusOne: "", song: "", message: "Sending so much love from afar! Congrats Aylen & Jacob!" }
+        ];
+
+        let currentFilter = 'all';
+
+        function getGuestData() {
+            return JSON.parse(localStorage.getItem('jacob_aylen_guests')) || initialGuests;
+        }
+
+        function saveGuestData(list) {
+            localStorage.setItem('jacob_aylen_guests', JSON.stringify(list));
+        }
+
+        function renderPeopleList() {
+            const guests = getGuestData();
+            const search = document.getElementById('peopleSearchInput').value.toLowerCase();
+            const grid = document.getElementById('peopleCardsGrid');
+            grid.innerHTML = '';
+
+            const filtered = guests.filter(g => {
+                const matchesFilter = currentFilter === 'all' || g.attendance === currentFilter;
+                const matchesSearch = g.name.toLowerCase().includes(search) || 
+                                      (g.song && g.song.toLowerCase().includes(search)) ||
+                                      (g.plusOne && g.plusOne.toLowerCase().includes(search));
+                return matchesFilter && matchesSearch;
+            });
+
+            const totalRSVPs = guests.length;
+            const confirmedAttending = guests.filter(g => g.attendance === 'Yes').length;
+            const totalParty = guests.filter(g => g.attendance === 'Yes').reduce((acc, g) => acc + parseInt(g.party || 1), 0);
+            const songCount = guests.filter(g => g.song && g.song.trim() !== '').length;
+
+            document.getElementById('stat-total').innerText = totalRSVPs;
+            document.getElementById('stat-attending').innerText = confirmedAttending;
+            document.getElementById('stat-party').innerText = totalParty;
+            document.getElementById('stat-songs').innerText = songCount;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 bg-white rounded-2xl border border-slate-200">
+                        <i class="fa-solid fa-users-slash text-4xl text-slate-300 mb-3"></i>
+                        <p class="text-slate-600 font-serif text-lg">No guest entries match your search or filter.</p>
+                        <button onclick="setPeopleFilter('all'); document.getElementById('peopleSearchInput').value='';" class="mt-3 text-xs font-bold text-burgundy-700 underline uppercase">Clear Filters</button>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(g => {
+                let badgeColor = "bg-green-100 text-green-800 border-green-300";
+                let badgeText = "Joyfully Attending";
+                let badgeIcon = "fa-circle-check";
+
+                if (g.attendance === 'Maybe') {
+                    badgeColor = "bg-amber-100 text-amber-800 border-amber-300";
+                    badgeText = "On Bench (Maybe)";
+                    badgeIcon = "fa-circle-question";
+                } else if (g.attendance === 'No') {
+                    badgeColor = "bg-red-100 text-red-800 border-red-300";
+                    badgeText = "Regretfully Declined";
+                    badgeIcon = "fa-circle-xmark";
+                }
+
+                const card = document.createElement('div');
+                card.className = "bg-white p-6 rounded-2xl border border-gold-300/40 shadow-md flex flex-col justify-between space-y-4 hover:shadow-lg transition";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-start justify-between gap-2 mb-3">
+                            <div>
+                                <h3 class="font-serif text-xl font-bold text-slate-900">${g.name}</h3>
+                                ${g.plusOne ? `<p class="text-xs text-slate-500"><i class="fa-solid fa-user-plus text-gold-600 mr-1"></i> +1: ${g.plusOne}</p>` : ''}
+                            </div>
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border ${badgeColor} flex items-center gap-1 shrink-0">
+                                <i class="fa-solid ${badgeIcon}"></i> ${badgeText}
+                            </span>
+                        </div>
+
+                        ${g.message ? `<p class="text-xs text-slate-600 italic bg-cream p-3 rounded-xl border border-gold-200/60 my-2">"${g.message}"</p>` : ''}
+                    </div>
+
+                    <div class="pt-3 border-t border-slate-100 space-y-1.5 text-xs text-slate-600">
+                        <div class="flex items-center justify-between">
+                            <span class="font-semibold text-slate-500"><i class="fa-solid fa-user-group text-burgundy-700 mr-1"></i> Party Count:</span>
+                            <span class="font-bold text-slate-800">${g.party} Guest(s)</span>
+                        </div>
+                        ${g.song ? `
+                        <div class="flex items-center justify-between">
+                            <span class="font-semibold text-slate-500"><i class="fa-solid fa-music text-gold-600 mr-1"></i> DJ Song:</span>
+                            <span class="font-medium text-burgundy-800 truncate max-w-[160px]">${g.song}</span>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterPeopleList() {
+            renderPeopleList();
+        }
+
+        function setPeopleFilter(status) {
+            currentFilter = status;
+            ['all', 'Yes', 'Maybe', 'No'].forEach(s => {
+                const btn = document.getElementById('filter-' + s);
+                if (btn) {
+                    if (s === status) {
+                        btn.className = "px-3.5 py-1.5 rounded-full text-xs font-bold bg-burgundy-800 text-gold-300";
+                    } else {
+                        btn.className = "px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200";
+                    }
+                }
+            });
+            renderPeopleList();
+        }
+
+        /* ----------------------------------------------------
+         * 6. RSVP Submission Handler (No Email Fields)
+         * ---------------------------------------------------- */
+        function handleRSVPSubmit(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('rsvpName').value.trim();
+            const attendance = document.querySelector('input[name="attendance"]:checked').value;
+            const party = document.getElementById('rsvpPartySize').value;
+            const plusOne = document.getElementById('rsvpPlusOne').value.trim();
+            const song = document.getElementById('rsvpSong').value.trim();
+            const message = document.getElementById('rsvpMessage').value.trim();
+
+            if (!name) return;
+
+            let guests = getGuestData();
+            guests.unshift({
+                id: Date.now(),
+                name,
+                attendance,
+                party,
+                plusOne,
+                song,
+                message
+            });
+
+            saveGuestData(guests);
+            document.getElementById('rsvpForm').reset();
+
+            triggerConfetti();
+            document.getElementById('rsvpModal').classList.remove('hidden');
+        }
+
+        function closeRSVPModal() {
+            document.getElementById('rsvpModal').classList.add('hidden');
+        }
+
+        function closeRSVPModalAndShowPeople() {
+            closeRSVPModal();
+            switchTab('people');
+        }
+
+        /* ----------------------------------------------------
+         * 7. Registry Engine
+         * ---------------------------------------------------- */
+        const registryItems = [
+            { id: 1, name: "New Wilson Football Signed by Both", cost: 50, raised: 50, icon: "fa-football", desc: "A keepsake football to display on our future mantle!" },
+            { id: 2, name: "His & Hers Travel Backpacks", cost: 150, raised: 120, icon: "fa-bag-shopping", desc: "Upgrading from our middle school backpacks for honeymoon travel." },
+            { id: 3, name: "Honeymoon Pizza & Wings Fund", cost: 300, raised: 240, icon: "fa-pizza-slice", desc: "Fueling our post-wedding adventures with our favorite late night meal!" },
+            { id: 4, name: "Custom Married Varsity Jackets", cost: 200, raised: 180, icon: "fa-shirt", desc: "Matching custom burgundy & gold jackets with our wedding date." },
+            { id: 5, name: "Bleacher Seat Cushions for Parents", cost: 100, raised: 90, icon: "fa-couch", desc: "Ensuring comfortable seating for the top fans in the front row." },
+            { id: 6, name: "Endless Movie & Snack Date Fund", cost: 150, raised: 110, icon: "fa-ticket", desc: "Sponsoring popcorn and movies for our weekly date nights." }
+        ];
+
+        let selectedRegistryItem = null;
+        let giftAmountChosen = 25;
+
+        function renderRegistry() {
+            const grid = document.getElementById('registryGrid');
+            grid.innerHTML = '';
+
+            registryItems.forEach(item => {
+                const percent = Math.min(100, Math.round((item.raised / item.cost) * 100));
+                const card = document.createElement('div');
+                card.className = "bg-white p-6 rounded-2xl border border-gold-300/40 shadow-md flex flex-col justify-between space-y-4";
+                card.innerHTML = `
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-burgundy-800 text-gold-300 flex items-center justify-center text-xl mb-4 shadow">
+                            <i class="fa-solid ${item.icon}"></i>
+                        </div>
+                        <h3 class="font-serif text-xl font-bold text-slate-900 mb-1">${item.name}</h3>
+                        <p class="text-xs text-slate-600 mb-4">${item.desc}</p>
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-bold">
+                            <span class="text-burgundy-700">$${item.raised} Funded</span>
+                            <span class="text-slate-500">Goal: $${item.cost}</span>
+                        </div>
+                        <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-gold-500 to-burgundy-700 rounded-full transition-all duration-500" style="width: ${percent}%"></div>
+                        </div>
+                        <button onclick="openRegistryModal(${item.id})" class="w-full mt-2 py-2.5 rounded-xl bg-cream border border-gold-500 text-burgundy-900 font-bold text-xs uppercase tracking-wider hover:bg-gold-50 transition shadow-sm">
+                            ${percent >= 100 ? 'Fully Funded <i class="fa-solid fa-check text-green-600"></i>' : 'Contribute / Gift This'}
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function openRegistryModal(id) {
+            selectedRegistryItem = registryItems.find(i => i.id === id);
+            if (!selectedRegistryItem) return;
+            document.getElementById('regModalTitle').innerText = selectedRegistryItem.name;
+            document.getElementById('registryModal').classList.remove('hidden');
+        }
+
+        function closeRegistryModal() {
+            document.getElementById('registryModal').classList.add('hidden');
+        }
+
+        function selectGiftAmount(amt) {
+            giftAmountChosen = amt;
+            document.querySelectorAll('.amt-btn').forEach(btn => {
+                if (btn.innerText === '$' + amt) {
+                    btn.classList.add('bg-gold-500', 'text-burgundy-900');
+                } else {
+                    btn.classList.remove('bg-gold-500', 'text-burgundy-900');
+                }
+            });
+        }
+
+        function confirmGiftContribution() {
+            if (selectedRegistryItem) {
+                selectedRegistryItem.raised += giftAmountChosen;
+                renderRegistry();
+                closeRegistryModal();
+                triggerConfetti();
+            }
+        }
+
+        /* ----------------------------------------------------
+         * 8. Guestbook Engine
+         * ---------------------------------------------------- */
+        const initialGuestbook = [
+            { name: "Coach Dave", relation: "AC Reynolds Coach", message: "Still can't believe you guys made it from middle school bleachers to marriage! So proud of you both!", date: "Just now" },
+            { name: "Sarah Miller", relation: "Bridesmaid", message: "Aylen, you are going to be the most gorgeous bride! Jacob better not bring a football to the altar!", date: "2 hours ago" },
+            { name: "Tyler Brooks", relation: "Groom's Teammates", message: "Congrats Jacob & Aylen! Best love story in school history! Can't wait for the cafeteria pizza feast!", date: "1 day ago" }
+        ];
+
+        function loadGuestbook() {
+            let messages = JSON.parse(localStorage.getItem('jacob_aylen_gb')) || initialGuestbook;
+            const feed = document.getElementById('guestbookFeed');
+            feed.innerHTML = '';
+
+            messages.forEach(msg => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-6 rounded-2xl shadow border border-gold-200 flex flex-col justify-between space-y-3";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-slate-900 text-sm">${msg.name}</span>
+                            <span class="text-[10px] bg-burgundy-50 text-burgundy-700 px-2 py-0.5 rounded-full font-semibold">${msg.relation || 'Guest'}</span>
+                        </div>
+                        <p class="text-slate-600 text-xs italic mt-2">"${msg.message}"</p>
+                    </div>
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-[10px] text-slate-400">
+                        <span><i class="fa-regular fa-clock"></i> ${msg.date}</span>
+                        <button onclick="triggerConfetti()" class="text-burgundy-700 hover:text-gold-600 font-bold">
+                            <i class="fa-regular fa-heart"></i> Cheer
+                        </button>
+                    </div>
+                `;
+                feed.appendChild(card);
+            });
+        }
+
+        function handleGuestbookSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('gbName').value;
+            const relation = document.getElementById('gbRelation').value;
+            const message = document.getElementById('gbMessage').value;
+
+            let messages = JSON.parse(localStorage.getItem('jacob_aylen_gb')) || initialGuestbook;
+            messages.unshift({
+                name,
+                relation,
+                message,
+                date: "Just now"
+            });
+
+            localStorage.setItem('jacob_aylen_gb', JSON.stringify(messages));
+            document.getElementById('guestbookForm').reset();
+            loadGuestbook();
+            triggerConfetti();
+        }
+
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 90,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#d4af37', '#8c1d35', '#ffffff', '#ecc94b']
+                });
+            }
+        }
+
+        window.onload = function() {
+            renderRegistry();
+            loadGuestbook();
+            renderPeopleList();
+        };
+    </script>
+</body>
+</html>
