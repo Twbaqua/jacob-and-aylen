@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jacob & Aylen | The Wedding</title>
+    <title>Jacob & Aylen | Midnight Wedding Celebration</title>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -13,12 +13,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
 
-    <!-- Font Awesome Icons -->
+    <!-- Font Awesome Icons CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Canvas Confetti Library -->
+    <!-- Canvas Confetti Library CDN -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+    <!-- Tailwind Theme Customization -->
     <script>
         tailwind.config = {
             theme: {
@@ -32,6 +33,11 @@
                             700: '#6b1d2f',
                             800: '#4a0e17',
                             900: '#2d060c',
+                        },
+                        roseGold: {
+                            400: '#fb7185',
+                            500: '#f43f5e',
+                            600: '#e11d48',
                         },
                         gold: {
                             300: '#f6e05e',
@@ -54,7 +60,9 @@
         }
     </script>
 
+    <!-- Custom CSS Styles -->
     <style>
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -71,14 +79,15 @@
         }
 
         .burgundy-glass {
-            background: rgba(45, 6, 12, 0.88);
+            background: rgba(45, 6, 12, 0.90);
             backdrop-filter: blur(14px);
             border: 1px solid rgba(212, 175, 55, 0.3);
         }
 
-        .light-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(8px);
+        .dark-card {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(244, 63, 94, 0.25);
         }
 
         @keyframes float {
@@ -116,6 +125,7 @@
 </head>
 <body class="bg-cream text-slate-800 font-sans selection:bg-burgundy-800 selection:text-gold-300 relative overflow-x-hidden min-h-screen flex flex-col justify-between">
 
+    <!-- Floating background particle canvas -->
     <canvas id="particleCanvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-40"></canvas>
 
     <!-- Navigation Header -->
@@ -126,9 +136,10 @@
                 <!-- Couple Brand Logo -->
                 <button onclick="switchTab('home')" class="flex items-center gap-2 group text-left">
                     <span class="font-script text-3xl sm:text-4xl text-gold-400 group-hover:text-gold-300 transition-colors">Jacob & Aylen</span>
-                    <i class="fa-solid fa-ring text-gold-500 text-xs sm:text-sm animate-pulse"></i>
+                    <i class="fa-solid fa-ring text-roseGold-500 text-xs sm:text-sm animate-pulse"></i>
                 </button>
 
+                <!-- Desktop Navigation Links -->
                 <nav class="hidden lg:flex items-center space-x-6 text-xs font-semibold uppercase tracking-widest text-slate-200">
                     <button onclick="switchTab('home')" id="nav-home" class="tab-btn active hover:text-gold-400 transition-colors py-2 px-1">Home</button>
                     <button onclick="switchTab('schedule')" id="nav-schedule" class="tab-btn hover:text-gold-400 transition-colors py-2 px-1">Schedule</button>
@@ -140,7 +151,7 @@
                     <button onclick="switchTab('guestbook')" id="nav-guestbook" class="tab-btn hover:text-gold-400 transition-colors py-2 px-1">Guestbook</button>
                 </nav>
 
-                <!-- Header Actions -->
+                <!-- Header Action Buttons -->
                 <div class="flex items-center gap-3">
                     <button id="headerMusicBtn" onclick="toggleAudio()" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-burgundy-800 border border-gold-500/40 text-gold-300 hover:bg-burgundy-700 transition text-xs font-medium">
                         <i id="headerMusicIcon" class="fa-solid fa-music text-gold-400"></i>
@@ -159,19 +170,21 @@
             </div>
         </div>
 
+        <!-- Mobile Drawer Menu -->
         <div id="mobileMenu" class="hidden lg:hidden bg-burgundy-900 border-b border-gold-500/30 px-4 pt-2 pb-6 space-y-3 text-center text-sm uppercase tracking-wider font-semibold">
             <button onclick="switchTab('home'); toggleMobileMenu()" class="block w-full py-2.5 text-slate-200 hover:text-gold-400 border-b border-burgundy-800">Home</button>
             <button onclick="switchTab('schedule'); toggleMobileMenu()" class="block w-full py-2.5 text-slate-200 hover:text-gold-400 border-b border-burgundy-800">Schedule</button>
             <button onclick="switchTab('rsvp'); toggleMobileMenu()" class="block w-full py-2.5 text-slate-200 hover:text-gold-400 border-b border-burgundy-800">RSVP</button>
             <button onclick="switchTab('people'); toggleMobileMenu()" class="block w-full py-2.5 text-gold-400 hover:text-gold-300 border-b border-burgundy-800 font-bold flex items-center justify-center gap-2">
-                <i class="fa-solid fa-users"></i> People (Guest Roster)
+                <i class="fa-solid fa-users"></i> People (Public Roster)
             </button>
             <button onclick="switchTab('registry'); toggleMobileMenu()" class="block w-full py-2.5 text-slate-200 hover:text-gold-400 border-b border-burgundy-800">Registry</button>
             <button onclick="switchTab('guestbook'); toggleMobileMenu()" class="block w-full py-2.5 text-slate-200 hover:text-gold-400">Guestbook</button>
         </div>
     </header>
 
-    <audio id="bg-music" src="A_Shared_Sigh.mp3" preload="auto" loop></audio>
+    <!-- Main HTML Audio Element -->
+    <audio id="bg-music" src="A Shared Sigh.mp3" preload="auto" loop></audio>
 
     <main class="flex-grow z-10">
 
@@ -181,7 +194,7 @@
                 <div class="max-w-4xl mx-auto text-center z-10 space-y-8">
                     
                     <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold-500/20 border border-gold-500/40 text-gold-300 text-xs font-bold tracking-widest uppercase animate-pulse">
-                        <i class="fa-solid fa-heart text-gold-400"></i> Save The Date
+                        <i class="fa-solid fa-heart text-roseGold-400"></i> Save The Date
                     </div>
 
                     <div class="space-y-4">
@@ -189,7 +202,7 @@
                             Jacob & Aylen
                         </h1>
                         <p class="font-serif italic text-xl sm:text-2xl text-slate-200 max-w-2xl mx-auto font-light leading-relaxed">
-                            "From the bleachers to the altar... We're officially a team!"
+                            "From the bleachers to the altar... We're officially a team! Game over, forever."
                         </p>
                     </div>
 
@@ -239,13 +252,14 @@
                             RSVP Now
                         </button>
                         <button onclick="switchTab('people')" class="px-6 py-3.5 rounded-full bg-burgundy-800 text-gold-300 border border-gold-500/50 font-semibold text-sm tracking-widest uppercase hover:bg-burgundy-700 transition shadow-md flex items-center gap-2">
-                            <i class="fa-solid fa-users"></i> View Guest Roster
+                            <i class="fa-solid fa-users"></i> View Public Roster
                         </button>
                     </div>
 
                 </div>
             </div>
 
+            <!-- Love Story Timeline -->
             <section class="py-20 px-4 max-w-5xl mx-auto">
                 <div class="text-center mb-16 space-y-3">
                     <span class="text-xs font-bold tracking-widest uppercase text-gold-600">The Playbook of Love</span>
@@ -381,6 +395,7 @@
                 </div>
             </div>
 
+            <!-- Venue Details Card -->
             <div class="mt-12 bg-gradient-to-r from-burgundy-900 via-burgundy-800 to-slate-900 rounded-3xl p-8 sm:p-12 text-white shadow-2xl border border-gold-500/30">
                 <div class="grid md:grid-cols-2 gap-8 items-center">
                     <div class="space-y-4">
@@ -410,7 +425,7 @@
                             </li>
                             <li class="flex items-start gap-2">
                                 <i class="fa-solid fa-shirt text-gold-400 mt-0.5"></i>
-                                <span>Team colors (Deep Burgundy & Warm Gold) strongly encouraged!</span>
+                                <span>Team colors (Deep Burgundy, Rose Gold & Warm Gold) strongly encouraged!</span>
                             </li>
                             <li class="flex items-start gap-2">
                                 <i class="fa-solid fa-users text-gold-400 mt-0.5"></i>
@@ -441,7 +456,7 @@
                         <input type="text" id="rsvpName" required placeholder="e.g. Coach Dave, Marcus Vance, or Aunt Sarah" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-burgundy-700 focus:border-transparent outline-none transition text-sm">
                     </div>
 
-                    <!-- Attendance Radio Buttons -->
+                    <!-- Attendance Options -->
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Will You Be Attending? *</label>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -468,18 +483,24 @@
 
                     <div class="grid sm:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Total Party Size / Guest Count</label>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Total Party Size / Guest Count (1 to 10)</label>
                             <select id="rsvpPartySize" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-burgundy-700 outline-none transition text-sm">
                                 <option value="1">1 Person (Just Me)</option>
                                 <option value="2">2 People (+1)</option>
                                 <option value="3">3 People (Family)</option>
                                 <option value="4">4 People (Full Group)</option>
+                                <option value="5">5 People</option>
+                                <option value="6">6 People</option>
+                                <option value="7">7 People</option>
+                                <option value="8">8 People</option>
+                                <option value="9">9 People</option>
+                                <option value="10">10 People (VIP Squad)</option>
                             </select>
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Plus One Name (Optional)</label>
-                            <input type="text" id="rsvpPlusOne" placeholder="Guest Name" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-burgundy-700 outline-none transition text-sm">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Plus One Name(s) (Optional)</label>
+                            <input type="text" id="rsvpPlusOne" placeholder="e.g. Jane Doe" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-burgundy-700 outline-none transition text-sm">
                         </div>
                     </div>
 
@@ -493,8 +514,8 @@
                         <textarea id="rsvpMessage" rows="3" placeholder="Share a sweet memory, advice, or warm wish..." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-burgundy-700 outline-none transition text-sm"></textarea>
                     </div>
 
-                    <button type="submit" class="w-full py-4 rounded-xl bg-burgundy-800 hover:bg-burgundy-900 text-white font-bold text-sm tracking-widest uppercase shadow-lg transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-paper-plane"></i> Submit RSVP & Join Public Roster
+                    <button type="submit" id="rsvpSubmitBtn" class="w-full py-4 rounded-xl bg-burgundy-800 hover:bg-burgundy-900 text-white font-bold text-sm tracking-widest uppercase shadow-lg transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i> Submit RSVP & Sync to Live Roster
                     </button>
 
                 </form>
@@ -505,8 +526,8 @@
         <section id="tab-people" class="page-tab hidden py-16 px-4 max-w-6xl mx-auto">
             
             <div class="text-center mb-10 space-y-3">
-                <span class="text-xs font-bold tracking-widest uppercase text-gold-600">Public Roster</span>
-                <h2 class="font-serif text-4xl sm:text-5xl font-bold text-burgundy-900">Guest List & Sign-Ups</h2>
+                <span class="text-xs font-bold tracking-widest uppercase text-gold-600">Public Live Roster</span>
+                <h2 class="font-serif text-4xl sm:text-5xl font-bold text-burgundy-900">Guest List & Live Sign-Ups</h2>
                 <p class="text-slate-600 text-sm max-w-xl mx-auto">
                     Everyone who has signed up or responded to Jacob & Aylen's wedding invitation!
                 </p>
@@ -607,11 +628,12 @@
 
     </main>
 
+    <!-- Footer -->
     <footer class="bg-burgundy-900 text-white py-12 px-4 border-t border-gold-500/30 z-10">
         <div class="max-w-4xl mx-auto text-center space-y-6">
             <h3 class="font-script text-5xl text-gold-400">Jacob & Aylen</h3>
             <p class="font-serif italic text-slate-300 text-sm max-w-xl mx-auto">
-                "From the bleachers to the altar... We're officially a team!"
+                "From the bleachers to the altar... We're officially a team! Game over, forever."
             </p>
             <p class="text-xs text-slate-400">
                 September 28, 2026 @ 12:00 AM • AC Reynolds Middle School Auditorium Gym
@@ -622,6 +644,7 @@
         </div>
     </footer>
 
+    <!-- Audio Player Widget ("A Shared Sigh") -->
     <div id="audioPlayerWidget" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:w-96 z-50 burgundy-glass text-white p-4 rounded-2xl shadow-2xl gold-glow transition-all transform duration-300">
         <div class="flex items-center gap-4">
             <button onclick="toggleAudio()" class="w-12 h-12 rounded-full bg-gold-500 text-burgundy-900 flex items-center justify-center text-lg font-bold shadow-lg hover:scale-105 transition shrink-0">
@@ -651,7 +674,7 @@
                 <i class="fa-solid fa-volume-high text-[10px]"></i>
             </div>
 
-            <!-- Local MP3 File Picker Option -->
+            <!-- Local Audio File Picker Fallback -->
             <div class="flex items-center justify-between text-[11px] pt-1">
                 <label for="localMp3Input" class="cursor-pointer text-gold-400 hover:text-gold-300 flex items-center gap-1.5 underline font-medium">
                     <i class="fa-solid fa-folder-open text-xs"></i> Choose local "A Shared Sigh.mp3"
@@ -662,6 +685,7 @@
         </div>
     </div>
 
+    <!-- RSVP Modal -->
     <div id="rsvpModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl p-8 max-w-md w-full text-center space-y-6 border border-gold-400 shadow-2xl animate-float">
             <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto text-3xl">
@@ -669,11 +693,11 @@
             </div>
             <h3 class="font-serif text-3xl font-bold text-burgundy-900">You're On The Roster!</h3>
             <p id="rsvpModalText" class="text-sm text-slate-600 leading-relaxed">
-                Thank you for signing up for Jacob & Aylen's wedding day on September 28, 2026 at 12:00 AM! Your response has been added to the public guest roster.
+                Thank you for signing up for Jacob & Aylen's wedding day on September 28, 2026 at 12:00 AM! Your response has been saved to the live public roster.
             </p>
             <div class="space-y-3 pt-2">
                 <button onclick="closeRSVPModalAndShowPeople()" class="w-full py-3 rounded-xl bg-gold-500 text-burgundy-900 font-bold text-xs uppercase tracking-widest hover:bg-gold-400 transition shadow">
-                    <i class="fa-solid fa-users mr-1"></i> View Yourself On People List
+                    <i class="fa-solid fa-users mr-1"></i> View Yourself On Public Roster
                 </button>
                 <button onclick="closeRSVPModal()" class="w-full py-2.5 text-xs text-slate-500 hover:text-slate-800 font-semibold uppercase">
                     Close
@@ -682,6 +706,7 @@
         </div>
     </div>
 
+    <!-- Registry Contribution Modal -->
     <div id="registryModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl p-8 max-w-md w-full space-y-6 border border-gold-400 shadow-2xl">
             <div class="text-center space-y-2">
@@ -694,10 +719,10 @@
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Select Amount</label>
                     <div class="grid grid-cols-4 gap-2">
-                        <button onclick="selectGiftAmount(25)" class="amt-btn py-2 rounded-lg border border-slate-200 text-xs font-bold hover:bg-gold-50">$25</button>
-                        <button onclick="selectGiftAmount(50)" class="amt-btn py-2 rounded-lg border border-slate-200 text-xs font-bold hover:bg-gold-50">$50</button>
-                        <button onclick="selectGiftAmount(100)" class="amt-btn py-2 rounded-lg border border-slate-200 text-xs font-bold hover:bg-gold-50">$100</button>
-                        <button onclick="selectGiftAmount(200)" class="amt-btn py-2 rounded-lg border border-slate-200 text-xs font-bold hover:bg-gold-50">$200</button>
+                        <button type="button" onclick="selectGiftAmount(25)" class="amt-btn py-2 rounded-lg border border-slate-200 text-xs font-bold hover:bg-gold-50 bg-gold-500 text-burgundy-900">$25</button>
+                        <button type="button" onclick="selectGiftAmount(50)" class="amt-btn py-2 rounded-lg border border-slate-200 text-xs font-bold hover:bg-gold-50">$50</button>
+                        <button type="button" onclick="selectGiftAmount(100)" class="amt-btn py-2 rounded-lg border border-slate-200 text-xs font-bold hover:bg-gold-50">$100</button>
+                        <button type="button" onclick="selectGiftAmount(200)" class="amt-btn py-2 rounded-lg border border-slate-200 text-xs font-bold hover:bg-gold-50">$200</button>
                     </div>
                 </div>
 
@@ -717,6 +742,151 @@
         </div>
     </div>
 
+    <!-- Firebase Imports and Synchronization Engine -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, addDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Environment Firebase Global Detection
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'jacob-aylen-wedding';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' 
+            ? JSON.parse(__firebase_config) 
+            : {
+                apiKey: "AIzaSyDemoConfigForWeddingApp123456",
+                authDomain: "jacob-and-aylen-wedding.firebaseapp.com",
+                projectId: "jacob-and-aylen-wedding",
+                storageBucket: "jacob-and-aylen-wedding.appspot.com",
+                messagingSenderId: "1234567890",
+                appId: "1:1234567890:web:1234567890"
+            };
+
+        let app, auth, db;
+        let currentUser = null;
+        let isFirebaseActive = false;
+
+        // RULE 1: Strict Paths
+        const getPublicCollectionPath = (collName) => `artifacts/${appId}/public/data/${collName}`;
+
+        async function initFirebaseSync() {
+            try {
+                app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                // RULE 3: Auth Before Queries
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        currentUser = user;
+                        isFirebaseActive = true;
+                        subscribeToFirestoreRealtime();
+                    }
+                });
+            } catch (err) {
+                console.warn("Firebase initialized in fallback offline mode:", err);
+            }
+        }
+
+        function subscribeToFirestoreRealtime() {
+            if (!db || !currentUser) return;
+
+            // 1. RSVPs Real-time Sync (RULE 2: Simple query without complex filters)
+            const rsvpRef = collection(db, getPublicCollectionPath('rsvps'));
+            onSnapshot(rsvpRef, (snapshot) => {
+                const liveRsvps = [];
+                snapshot.forEach(doc => {
+                    liveRsvps.push({ id: doc.id, ...doc.data() });
+                });
+                if (liveRsvps.length > 0) {
+                    window.allGuestsData = liveRsvps;
+                    if (typeof window.renderPeopleList === 'function') {
+                        window.renderPeopleList();
+                    }
+                }
+            }, (err) => console.error("RSVP Sync error:", err));
+
+            // 2. Guestbook Real-time Sync
+            const gbRef = collection(db, getPublicCollectionPath('guestbook'));
+            onSnapshot(gbRef, (snapshot) => {
+                const liveGb = [];
+                snapshot.forEach(doc => {
+                    liveGb.push({ id: doc.id, ...doc.data() });
+                });
+                if (liveGb.length > 0) {
+                    window.guestbookData = liveGb;
+                    if (typeof window.loadGuestbook === 'function') {
+                        window.loadGuestbook();
+                    }
+                }
+            }, (err) => console.error("Guestbook Sync error:", err));
+
+            // 3. Registry Funds Real-time Sync
+            const regRef = collection(db, getPublicCollectionPath('registry'));
+            onSnapshot(regRef, (snapshot) => {
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    const item = window.registryItems.find(i => i.id === data.itemId);
+                    if (item && data.raised !== undefined) {
+                        item.raised = data.raised;
+                    }
+                });
+                if (typeof window.renderRegistry === 'function') {
+                    window.renderRegistry();
+                }
+            }, (err) => console.error("Registry Sync error:", err));
+        }
+
+        // Global Firebase Action Exporters
+        window.saveRSVPToFirebase = async function(rsvpObject) {
+            if (isFirebaseActive && db && currentUser) {
+                try {
+                    const rsvpRef = collection(db, getPublicCollectionPath('rsvps'));
+                    await addDoc(rsvpRef, {
+                        ...rsvpObject,
+                        createdAt: new Date().toISOString()
+                    });
+                } catch (e) {
+                    console.error("Error saving RSVP to Firebase:", e);
+                }
+            }
+        };
+
+        window.saveGuestbookToFirebase = async function(gbObject) {
+            if (isFirebaseActive && db && currentUser) {
+                try {
+                    const gbRef = collection(db, getPublicCollectionPath('guestbook'));
+                    await addDoc(gbRef, {
+                        ...gbObject,
+                        createdAt: new Date().toISOString()
+                    });
+                } catch (e) {
+                    console.error("Error saving Guestbook to Firebase:", e);
+                }
+            }
+        };
+
+        window.updateRegistryFundInFirebase = async function(itemId, newTotal) {
+            if (isFirebaseActive && db && currentUser) {
+                try {
+                    const itemDocRef = doc(db, getPublicCollectionPath('registry'), `item_${itemId}`);
+                    await setDoc(itemDocRef, { itemId, raised: newTotal }, { merge: true });
+                } catch (e) {
+                    console.error("Error updating registry in Firebase:", e);
+                }
+            }
+        };
+
+        // Initialize Firebase on load
+        initFirebaseSync();
+    </script>
+
+    <!-- Application JavaScript Engine -->
     <script>
         /* ----------------------------------------------------
          * 1. SPA Navigation Engine
@@ -776,7 +946,7 @@
                 this.speedY = -Math.random() * 0.7 - 0.2;
                 this.speedX = Math.random() * 0.4 - 0.2;
                 this.opacity = Math.random() * 0.5 + 0.2;
-                this.color = Math.random() > 0.5 ? '#d4af37' : '#8c1d35';
+                this.color = Math.random() > 0.5 ? '#d4af37' : '#f43f5e';
             }
             update() {
                 this.y += this.speedY;
@@ -810,7 +980,7 @@
         animateParticles();
 
         /* ----------------------------------------------------
-         * 3. Live Countdown Timer (Target: Sept 28, 2026 12:00 AM)
+         * 3. Countdown Timer (Target: Sept 28, 2026 12:00 AM)
          * ---------------------------------------------------- */
         const targetDate = new Date('September 28, 2026 00:00:00').getTime();
 
@@ -841,7 +1011,7 @@
         updateCountdown();
 
         /* ----------------------------------------------------
-         * 4. Soundtrack Audio Player ("A Shared Sigh")
+         * 4. Audio Player ("A Shared Sigh.mp3" & Synth Fallback)
          * ---------------------------------------------------- */
         const audio = document.getElementById('bg-music');
         let isPlaying = false;
@@ -939,35 +1109,27 @@
         }
 
         /* ----------------------------------------------------
-         * 5. People / Public Guest Roster Management
+         * 5. People / Public Guest Roster Data & State
          * ---------------------------------------------------- */
-        const initialGuests = [
-            { id: 1, name: "Coach Dave", attendance: "Yes", party: 2, plusOne: "Mrs. Dave", song: "Eye of the Tiger - Survivor", message: "So proud of you two! From middle school gym class to forever!" },
-            { id: 2, name: "Sarah & Marcus", attendance: "Yes", party: 2, plusOne: "Marcus Vance", song: "Perfect - Ed Sheeran", message: "Can't wait for the midnight vows and pizza feast!" },
-            { id: 3, name: "Tyler Brooks", attendance: "Yes", party: 1, plusOne: "", song: "All of Me - John Legend", message: "Jacob, don't drop the football at the altar man!" },
-            { id: 4, name: "Coach Miller", attendance: "Maybe", party: 1, plusOne: "", song: "Don't Stop Believin'", message: "Will try my best to make midnight kickoff!" },
-            { id: 5, name: "Jessica Taylor", attendance: "No", party: 1, plusOne: "", song: "", message: "Sending so much love from afar! Congrats Aylen & Jacob!" }
+        window.allGuestsData = [
+            { id: '1', name: "Coach Dave", attendance: "Yes", party: 2, plusOne: "Mrs. Dave", song: "Eye of the Tiger - Survivor", message: "So proud of you two! From middle school gym class to forever!" },
+            { id: '2', name: "Sarah & Marcus", attendance: "Yes", party: 2, plusOne: "Marcus Vance", song: "Perfect - Ed Sheeran", message: "Can't wait for the midnight vows and pizza feast!" },
+            { id: '3', name: "Tyler Brooks", attendance: "Yes", party: 1, plusOne: "", song: "All of Me - John Legend", message: "Jacob, don't drop the football at the altar man!" },
+            { id: '4', name: "Coach Miller", attendance: "Maybe", party: 1, plusOne: "", song: "Don't Stop Believin'", message: "Will try my best to make midnight kickoff!" },
+            { id: '5', name: "Jessica Taylor", attendance: "No", party: 1, plusOne: "", song: "", message: "Sending so much love from afar! Congrats Aylen & Jacob!" }
         ];
 
         let currentFilter = 'all';
 
-        function getGuestData() {
-            return JSON.parse(localStorage.getItem('jacob_aylen_guests')) || initialGuests;
-        }
-
-        function saveGuestData(list) {
-            localStorage.setItem('jacob_aylen_guests', JSON.stringify(list));
-        }
-
         function renderPeopleList() {
-            const guests = getGuestData();
+            const guests = window.allGuestsData;
             const search = document.getElementById('peopleSearchInput').value.toLowerCase();
             const grid = document.getElementById('peopleCardsGrid');
             grid.innerHTML = '';
 
             const filtered = guests.filter(g => {
                 const matchesFilter = currentFilter === 'all' || g.attendance === currentFilter;
-                const matchesSearch = g.name.toLowerCase().includes(search) || 
+                const matchesSearch = (g.name || '').toLowerCase().includes(search) || 
                                       (g.song && g.song.toLowerCase().includes(search)) ||
                                       (g.plusOne && g.plusOne.toLowerCase().includes(search));
                 return matchesFilter && matchesSearch;
@@ -1029,7 +1191,7 @@
                     <div class="pt-3 border-t border-slate-100 space-y-1.5 text-xs text-slate-600">
                         <div class="flex items-center justify-between">
                             <span class="font-semibold text-slate-500"><i class="fa-solid fa-user-group text-burgundy-700 mr-1"></i> Party Count:</span>
-                            <span class="font-bold text-slate-800">${g.party} Guest(s)</span>
+                            <span class="font-bold text-slate-800">${g.party || 1} Guest(s)</span>
                         </div>
                         ${g.song ? `
                         <div class="flex items-center justify-between">
@@ -1063,34 +1225,40 @@
         }
 
         /* ----------------------------------------------------
-         * 6. RSVP Submission Handler (No Email Fields)
+         * 6. RSVP Submission Handler (Strictly NO Email Field)
          * ---------------------------------------------------- */
-        function handleRSVPSubmit(e) {
+        async function handleRSVPSubmit(e) {
             e.preventDefault();
 
             const name = document.getElementById('rsvpName').value.trim();
             const attendance = document.querySelector('input[name="attendance"]:checked').value;
-            const party = document.getElementById('rsvpPartySize').value;
+            const party = parseInt(document.getElementById('rsvpPartySize').value, 10) || 1;
             const plusOne = document.getElementById('rsvpPlusOne').value.trim();
             const song = document.getElementById('rsvpSong').value.trim();
             const message = document.getElementById('rsvpMessage').value.trim();
 
             if (!name) return;
 
-            let guests = getGuestData();
-            guests.unshift({
-                id: Date.now(),
+            const newRSVP = {
+                id: 'rsvp_' + Date.now(),
                 name,
                 attendance,
                 party,
                 plusOne,
                 song,
                 message
-            });
+            };
 
-            saveGuestData(guests);
+            // Add locally to state immediately
+            window.allGuestsData.unshift(newRSVP);
+            renderPeopleList();
+
+            // Save to Firebase Realtime Firestore
+            if (typeof window.saveRSVPToFirebase === 'function') {
+                await window.saveRSVPToFirebase(newRSVP);
+            }
+
             document.getElementById('rsvpForm').reset();
-
             triggerConfetti();
             document.getElementById('rsvpModal').classList.remove('hidden');
         }
@@ -1107,13 +1275,13 @@
         /* ----------------------------------------------------
          * 7. Registry Engine
          * ---------------------------------------------------- */
-        const registryItems = [
+        window.registryItems = [
             { id: 1, name: "New Wilson Football Signed by Both", cost: 50, raised: 50, icon: "fa-football", desc: "A keepsake football to display on our future mantle!" },
             { id: 2, name: "His & Hers Travel Backpacks", cost: 150, raised: 120, icon: "fa-bag-shopping", desc: "Upgrading from our middle school backpacks for honeymoon travel." },
             { id: 3, name: "Honeymoon Pizza & Wings Fund", cost: 300, raised: 240, icon: "fa-pizza-slice", desc: "Fueling our post-wedding adventures with our favorite late night meal!" },
             { id: 4, name: "Custom Married Varsity Jackets", cost: 200, raised: 180, icon: "fa-shirt", desc: "Matching custom burgundy & gold jackets with our wedding date." },
-            { id: 5, name: "Bleacher Seat Cushions for Parents", cost: 100, raised: 90, icon: "fa-couch", desc: "Ensuring comfortable seating for the top fans in the front row." },
-            { id: 6, name: "Endless Movie & Snack Date Fund", cost: 150, raised: 110, icon: "fa-ticket", desc: "Sponsoring popcorn and movies for our weekly date nights." }
+            { id: 5, name: "Middle School Reunion Fund", cost: 250, raised: 190, icon: "fa-graduation-cap", desc: "Sponsoring our annual alumni gathering where we first met." },
+            { id: 6, name: "Game Room & Arcade Upgrade", cost: 400, raised: 260, icon: "fa-gamepad", desc: "Building our dream cozy game room for friendly sports showdowns." }
         ];
 
         let selectedRegistryItem = null;
@@ -1121,9 +1289,10 @@
 
         function renderRegistry() {
             const grid = document.getElementById('registryGrid');
+            if (!grid) return;
             grid.innerHTML = '';
 
-            registryItems.forEach(item => {
+            window.registryItems.forEach(item => {
                 const percent = Math.min(100, Math.round((item.raised / item.cost) * 100));
                 const card = document.createElement('div');
                 card.className = "bg-white p-6 rounded-2xl border border-gold-300/40 shadow-md flex flex-col justify-between space-y-4";
@@ -1142,7 +1311,7 @@
                             <span class="text-slate-500">Goal: $${item.cost}</span>
                         </div>
                         <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
-                            <div class="h-full bg-gradient-to-r from-gold-500 to-burgundy-700 rounded-full transition-all duration-500" style="width: ${percent}%"></div>
+                            <div class="h-full bg-gradient-to-r from-gold-500 to-roseGold-500 rounded-full transition-all duration-500" style="width: ${percent}%"></div>
                         </div>
                         <button onclick="openRegistryModal(${item.id})" class="w-full mt-2 py-2.5 rounded-xl bg-cream border border-gold-500 text-burgundy-900 font-bold text-xs uppercase tracking-wider hover:bg-gold-50 transition shadow-sm">
                             ${percent >= 100 ? 'Fully Funded <i class="fa-solid fa-check text-green-600"></i>' : 'Contribute / Gift This'}
@@ -1154,7 +1323,7 @@
         }
 
         function openRegistryModal(id) {
-            selectedRegistryItem = registryItems.find(i => i.id === id);
+            selectedRegistryItem = window.registryItems.find(i => i.id === id);
             if (!selectedRegistryItem) return;
             document.getElementById('regModalTitle').innerText = selectedRegistryItem.name;
             document.getElementById('registryModal').classList.remove('hidden');
@@ -1168,37 +1337,41 @@
             giftAmountChosen = amt;
             document.querySelectorAll('.amt-btn').forEach(btn => {
                 if (btn.innerText === '$' + amt) {
-                    btn.classList.add('bg-gold-500', 'text-burgundy-900');
+                    btn.className = "amt-btn py-2 rounded-lg border border-slate-200 text-xs font-bold hover:bg-gold-50 bg-gold-500 text-burgundy-900";
                 } else {
-                    btn.classList.remove('bg-gold-500', 'text-burgundy-900');
+                    btn.className = "amt-btn py-2 rounded-lg border border-slate-200 text-xs font-bold hover:bg-gold-50";
                 }
             });
         }
 
-        function confirmGiftContribution() {
+        async function confirmGiftContribution() {
             if (selectedRegistryItem) {
                 selectedRegistryItem.raised += giftAmountChosen;
                 renderRegistry();
                 closeRegistryModal();
                 triggerConfetti();
+
+                if (typeof window.updateRegistryFundInFirebase === 'function') {
+                    await window.updateRegistryFundInFirebase(selectedRegistryItem.id, selectedRegistryItem.raised);
+                }
             }
         }
 
         /* ----------------------------------------------------
          * 8. Guestbook Engine
          * ---------------------------------------------------- */
-        const initialGuestbook = [
-            { name: "Coach Dave", relation: "AC Reynolds Coach", message: "Still can't believe you guys made it from middle school bleachers to marriage! So proud of you both!", date: "Just now" },
-            { name: "Sarah Miller", relation: "Bridesmaid", message: "Aylen, you are going to be the most gorgeous bride! Jacob better not bring a football to the altar!", date: "2 hours ago" },
-            { name: "Tyler Brooks", relation: "Groom's Teammates", message: "Congrats Jacob & Aylen! Best love story in school history! Can't wait for the cafeteria pizza feast!", date: "1 day ago" }
+        window.guestbookData = [
+            { id: 'gb_1', name: "Coach Dave", relation: "AC Reynolds Coach", message: "Still can't believe you guys made it from middle school bleachers to marriage! So proud of you both!", createdAt: "2026-09-01T10:00:00Z" },
+            { id: 'gb_2', name: "Sarah Miller", relation: "Bridesmaid", message: "Aylen, you are going to be the most gorgeous bride! Jacob better not bring a football to the altar!", createdAt: "2026-09-02T14:30:00Z" },
+            { id: 'gb_3', name: "Tyler Brooks", relation: "Groom's Teammates", message: "Congrats Jacob & Aylen! Best love story in school history! Can't wait for the cafeteria pizza feast!", createdAt: "2026-09-03T18:00:00Z" }
         ];
 
         function loadGuestbook() {
-            let messages = JSON.parse(localStorage.getItem('jacob_aylen_gb')) || initialGuestbook;
             const feed = document.getElementById('guestbookFeed');
+            if (!feed) return;
             feed.innerHTML = '';
 
-            messages.forEach(msg => {
+            window.guestbookData.forEach(msg => {
                 const card = document.createElement('div');
                 card.className = "bg-white p-6 rounded-2xl shadow border border-gold-200 flex flex-col justify-between space-y-3";
                 card.innerHTML = `
@@ -1210,8 +1383,8 @@
                         <p class="text-slate-600 text-xs italic mt-2">"${msg.message}"</p>
                     </div>
                     <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-[10px] text-slate-400">
-                        <span><i class="fa-regular fa-clock"></i> ${msg.date}</span>
-                        <button onclick="triggerConfetti()" class="text-burgundy-700 hover:text-gold-600 font-bold">
+                        <span><i class="fa-regular fa-clock"></i> Just now</span>
+                        <button onclick="triggerConfetti()" class="text-burgundy-700 hover:text-gold-600 font-bold flex items-center gap-1">
                             <i class="fa-regular fa-heart"></i> Cheer
                         </button>
                     </div>
@@ -1220,24 +1393,30 @@
             });
         }
 
-        function handleGuestbookSubmit(e) {
+        async function handleGuestbookSubmit(e) {
             e.preventDefault();
-            const name = document.getElementById('gbName').value;
-            const relation = document.getElementById('gbRelation').value;
-            const message = document.getElementById('gbMessage').value;
+            const name = document.getElementById('gbName').value.trim();
+            const relation = document.getElementById('gbRelation').value.trim();
+            const message = document.getElementById('gbMessage').value.trim();
 
-            let messages = JSON.parse(localStorage.getItem('jacob_aylen_gb')) || initialGuestbook;
-            messages.unshift({
+            if (!name || !message) return;
+
+            const newMsg = {
+                id: 'gb_' + Date.now(),
                 name,
-                relation,
+                relation: relation || 'Guest',
                 message,
-                date: "Just now"
-            });
+                createdAt: new Date().toISOString()
+            };
 
-            localStorage.setItem('jacob_aylen_gb', JSON.stringify(messages));
+            window.guestbookData.unshift(newMsg);
             document.getElementById('guestbookForm').reset();
             loadGuestbook();
             triggerConfetti();
+
+            if (typeof window.saveGuestbookToFirebase === 'function') {
+                await window.saveGuestbookToFirebase(newMsg);
+            }
         }
 
         function triggerConfetti() {
@@ -1246,7 +1425,7 @@
                     particleCount: 90,
                     spread: 70,
                     origin: { y: 0.6 },
-                    colors: ['#d4af37', '#8c1d35', '#ffffff', '#ecc94b']
+                    colors: ['#d4af37', '#8c1d35', '#ffffff', '#f43f5e']
                 });
             }
         }
